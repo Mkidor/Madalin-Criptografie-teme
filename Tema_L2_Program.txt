@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+// 10 ->b2
+int cifraLaCifra(char c) {
+    if (c >= '0' && c <= '9') {
+        return c - '0';
+    }
+    else if (c >= 'A' && c <= 'Z') {
+        return c - 'A' + 10;
+    }
+    else if (c >= 'a' && c <= 'z') {
+        return c - 'a' + 10;
+    }
+    return -1; 
+}
+
+// b1 ->10
+int conversieLaZecimal(string numar, int baza) {
+    int numarZecimal = 0;
+    int putere = 0;
+    for (int i = numar.length() - 1; i >= 0; i--) {
+        int cifra = cifraLaCifra(numar[i]);
+        if (cifra == -1 || cifra >= baza) {
+            cerr << "Numarul introdus nu este valid pentru baza specificata.\n";
+            return -1;
+        }
+        numarZecimal += cifra * pow(baza, putere);
+        putere++;
+    }
+    return numarZecimal;
+}
+
+// 10 -> b2
+string conversieDinZecimal(int numar, int baza) {
+    string rezultat = "";
+    while (numar > 0) {
+        int cifra = numar % baza;
+        char cifraCaracter = (cifra < 10) ? ('0' + cifra) : ('A' + cifra - 10);
+        rezultat = cifraCaracter + rezultat;
+        numar /= baza;
+    }
+    return rezultat;
+}
+
+int main() {
+    int bazaInitiala, bazaFinala;
+    string numar;
+
+    cout << "Introduceti numarul si baza acestuia: ";
+    cin >> numar >> bazaInitiala;
+
+    cout << "Introduceti baza in care doriti sa convertiti numarul (de la 2 la 26): ";
+    cin >> bazaFinala;
+
+    if (bazaInitiala < 2 || bazaInitiala > 26 || bazaFinala < 2 || bazaFinala > 26) {
+        cerr << "Bazele introduse nu sunt valide. Introduceti baze intre 2 si 26.\n";
+        return 1;
+    }
+
+    // b1 -> 10
+    int numarZecimal = conversieLaZecimal(numar, bazaInitiala);
+    if (numarZecimal == -1) {
+        return 1; // In caz de eroare, incheiem programul
+    }
+
+    // 10 -> b2
+    string rezultat = conversieDinZecimal(numarZecimal, bazaFinala);
+
+    cout << "Rezultatul conversiei este: " << rezultat << endl;
+
+    return 0;
+}
