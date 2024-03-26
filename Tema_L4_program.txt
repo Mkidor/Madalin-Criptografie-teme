@@ -1,0 +1,33 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+long long fermat_factorization(long long n) {
+    if (n % 2 == 0) return 2;
+
+    srand(time(NULL));
+    long long a = rand() % (n - 1) + 1;
+
+    long long x = sqrt(n) + 1;
+    long long y = x * x - n;
+
+    while (sqrt(y) != floor(sqrt(y))) {
+        x++;
+        y = x * x - n;
+    }
+
+    long long p = x - sqrt(y);
+    long long q = x + sqrt(y);
+
+    return (p == 1 || q == 1) ? n : p;
+}
+
+int main() {
+    long long n;
+    cout << "Introduceti numarul de factorizat: ";
+    cin >> n;
+
+    cout << "Un factor prim al lui " << n << " este: " << fermat_factorization(n) << endl;
+    return 0;
+}
